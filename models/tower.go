@@ -5,15 +5,11 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/martijnspitter/tower-defense/assets"
+	"github.com/martijnspitter/tower-defense/system"
 )
 
-type Vector struct {
-	X float64
-	Y float64
-}
-
 type Tower struct {
-	position Vector
+	position system.Vector
 	tower    *ebiten.Image
 	rotation float64
 }
@@ -25,10 +21,7 @@ func NewTower(screenWidth, screenHeight int) *Tower {
 	halfW := float64(bounds.Dx()) / 2
 	halfH := float64(bounds.Dy()) / 2
 
-	pos := Vector{
-		X: float64(screenWidth)/2 - halfW,
-		Y: float64(screenHeight)/2 - halfH,
-	}
+	pos := system.NewVector(float64(screenWidth)/2-halfW, float64(screenHeight)/2-halfH)
 
 	return &Tower{
 		position: pos,
