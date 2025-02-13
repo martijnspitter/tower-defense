@@ -40,5 +40,5 @@ func (g *Game) Layout(width, height int) (int, int) {
 }
 
 func (g *Game) switchToTD() {
-	g.scene = scene.NewTowerDefense()
+	g.scene = scene.NewTowerDefense(g.screenWidth, g.screenHeight)
 }

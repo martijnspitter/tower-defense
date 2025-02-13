@@ -8,6 +8,11 @@ import (
 	"github.com/martijnspitter/tower-defense/game"
 )
 
+const (
+	ScreenWidth  = 800
+	ScreenHeight = 600
+)
+
 type Game struct{}
 
 func (g *Game) Update() error {
@@ -19,13 +24,13 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return 320, 240
+	return ScreenWidth, ScreenHeight
 }
 
 func main() {
-	ebiten.SetWindowSize(640, 480)
+	ebiten.SetWindowSize(800, 800)
 	ebiten.SetWindowTitle("Tower Defense")
-	if err := ebiten.RunGame(game.NewGame(320, 240)); err != nil {
+	if err := ebiten.RunGame(game.NewGame(ScreenWidth, ScreenHeight)); err != nil {
 		log.Fatal(err)
 	}
 }
