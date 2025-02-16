@@ -11,7 +11,7 @@ type Scene interface {
 }
 
 type Game struct {
-	scene        Scene
+	scene        *scene.TowerDefense
 	screenWidth  int
 	screenHeight int
 }
@@ -25,6 +25,11 @@ func NewGame(screenWidth, screenHeight int) *Game {
 
 func (g *Game) Update() error {
 	g.scene.Update()
+
+	if g.scene.Health == 0 {
+		g.Reset()
+	}
+
 	return nil
 }
 
@@ -40,5 +45,9 @@ func (g *Game) Layout(width, height int) (int, int) {
 }
 
 func (g *Game) switchToTD() {
+	g.scene = scene.NewTowerDefense(g.screenWidth, g.screenHeight)
+}
+
+func (g *Game) Reset() {
 	g.scene = scene.NewTowerDefense(g.screenWidth, g.screenHeight)
 }
