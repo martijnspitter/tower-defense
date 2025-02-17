@@ -1,7 +1,9 @@
 package models
 
 import (
+	"github.com/google/uuid"
 	"github.com/hajimehoshi/ebiten/v2"
+
 	"github.com/martijnspitter/tower-defense/assets"
 	"github.com/martijnspitter/tower-defense/types"
 
@@ -14,6 +16,7 @@ type Enemy struct {
 	asset    *ebiten.Image
 	movement types.Vector
 	Health   int
+	ID       uuid.UUID
 }
 
 func NewEnemy(screenWidth, screenHeight int) *Enemy {
@@ -28,6 +31,7 @@ func NewEnemy(screenWidth, screenHeight int) *Enemy {
 		asset:    asset,
 		movement: movement,
 		Health:   2,
+		ID:       uuid.New(),
 	}
 }
 

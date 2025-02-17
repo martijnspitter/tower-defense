@@ -1,8 +1,6 @@
 package system
 
 import (
-	"fmt"
-
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/martijnspitter/tower-defense/models"
 )
@@ -23,7 +21,6 @@ func NewShooter(screenWidth, screenHeigth int) *Shooter {
 func (s *Shooter) AddBullet(target *models.Enemy) {
 	bullet := models.NewBullet(target, s.screenWidth, s.screenHeight)
 	s.Bullets = append(s.Bullets, bullet)
-	fmt.Println("bullets len", len(s.Bullets))
 }
 
 func (s *Shooter) Update() {

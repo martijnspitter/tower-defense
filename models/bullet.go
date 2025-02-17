@@ -82,8 +82,8 @@ func newMovementForBullet(pos types.Vector, target *Enemy) types.Vector {
 
 	// Direction is the target minus the current position
 	direction := types.Vector{
-		X: target.position.X - pos.X,
-		Y: target.position.Y - pos.Y,
+		X: target.Position().X - pos.X,
+		Y: target.Position().Y - pos.Y,
 	}
 
 	normalizedDirection := direction.Normalize()

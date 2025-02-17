@@ -26,6 +26,7 @@ type TowerDefense struct {
 	shooter      *system.Shooter
 	shootTimer   *types.Timer
 	Health       int
+	curTarget    *models.Enemy
 }
 
 func NewTowerDefense(screenWidth, screenHeight int) *TowerDefense {
@@ -54,13 +55,30 @@ func (td *TowerDefense) Update() {
 		td.enemies = append(td.enemies, m)
 	}
 
+	// Update current target status
+	if td.curTarget != nil {
+		targetStillExists := false
+		for _, enemy := range td.enemies {
+			if enemy.ID == td.curTarget.ID {
+				targetStillExists = true
+				break
+			}
+		}
+		if !targetStillExists {
+			td.curTarget = nil
+		}
+	}
+
 	td.shootTimer.Update()
 	if td.shootTimer.IsReady() {
 		td.shootTimer.Reset()
 
-		if len(td.enemies) > 0 {
-			closestEnemy := td.GetClosestEnemy(td.tower.Position())
-			td.shooter.AddBullet(closestEnemy)
+		if td.curTarget == nil && len(td.enemies) > 0 {
+			td.curTarget = td.GetClosestEnemy(td.tower.Position())
+		}
+
+		if td.curTarget != nil {
+			td.shooter.AddBullet(td.curTarget)
 		}
 	}
 
@@ -77,6 +95,9 @@ func (td *TowerDefense) Update() {
 				m.Hit()
 				if m.Health == 0 {
 					td.enemies = append(td.enemies[:i], td.enemies[i+1:]...)
+					if td.curTarget != nil && m.ID.String() == td.curTarget.ID.String() {
+						td.curTarget = nil
+					}
 				}
 			}
 		}
@@ -86,8 +107,10 @@ func (td *TowerDefense) Update() {
 		if m.Collider().Intersects(td.tower.Collider()) {
 			td.Health--
 			td.enemies = append(td.enemies[:i], td.enemies[i+1:]...)
-
-			fmt.Println("Enemy hit tower")
+			if td.curTarget != nil && td.curTarget.ID == m.ID {
+				td.curTarget = nil
+			}
+			fmt.Println("Enemy hit tower", td.Health)
 		}
 	}
 }
