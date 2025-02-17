@@ -2,6 +2,7 @@ package game
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/martijnspitter/tower-defense/context"
 	"github.com/martijnspitter/tower-defense/scene"
 )
 
@@ -14,10 +15,12 @@ type Game struct {
 	scene        *scene.TowerDefense
 	screenWidth  int
 	screenHeight int
+	context      *context.Context
 }
 
 func NewGame(screenWidth, screenHeight int) *Game {
-	g := &Game{screenWidth: screenWidth, screenHeight: screenHeight}
+	context := context.NewContext()
+	g := &Game{screenWidth: screenWidth, screenHeight: screenHeight, context: context}
 	g.switchToTD()
 
 	return g
@@ -26,7 +29,8 @@ func NewGame(screenWidth, screenHeight int) *Game {
 func (g *Game) Update() error {
 	g.scene.Update()
 
-	if g.scene.Health == 0 {
+	if g.context.Health == 0 {
+		g.context.ResetHealth()
 		g.Reset()
 	}
 
@@ -45,9 +49,9 @@ func (g *Game) Layout(width, height int) (int, int) {
 }
 
 func (g *Game) switchToTD() {
-	g.scene = scene.NewTowerDefense(g.screenWidth, g.screenHeight)
+	g.scene = scene.NewTowerDefense(g.screenWidth, g.screenHeight, g.context)
 }
 
 func (g *Game) Reset() {
-	g.scene = scene.NewTowerDefense(g.screenWidth, g.screenHeight)
+	g.scene = scene.NewTowerDefense(g.screenWidth, g.screenHeight, g.context)
 }

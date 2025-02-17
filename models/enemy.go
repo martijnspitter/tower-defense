@@ -16,6 +16,7 @@ type Enemy struct {
 	asset    *ebiten.Image
 	movement types.Vector
 	Health   int
+	Points   int
 	ID       uuid.UUID
 }
 
@@ -31,6 +32,7 @@ func NewEnemy(screenWidth, screenHeight int) *Enemy {
 		asset:    asset,
 		movement: movement,
 		Health:   2,
+		Points:   2,
 		ID:       uuid.New(),
 	}
 }

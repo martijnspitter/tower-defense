@@ -5,6 +5,7 @@ import (
 	"math"
 	"time"
 
+	"github.com/martijnspitter/tower-defense/context"
 	"github.com/martijnspitter/tower-defense/models"
 	"github.com/martijnspitter/tower-defense/system"
 	"github.com/martijnspitter/tower-defense/types"
@@ -25,11 +26,11 @@ type TowerDefense struct {
 	screenHeight int
 	shooter      *system.Shooter
 	shootTimer   *types.Timer
-	Health       int
 	curTarget    *models.Enemy
+	context      *context.Context
 }
 
-func NewTowerDefense(screenWidth, screenHeight int) *TowerDefense {
+func NewTowerDefense(screenWidth, screenHeight int, context *context.Context) *TowerDefense {
 	tower := models.NewTower(screenWidth, screenHeight)
 	shooter := system.NewShooter(screenWidth, screenHeight)
 
@@ -40,7 +41,7 @@ func NewTowerDefense(screenWidth, screenHeight int) *TowerDefense {
 		spawntimer:   types.NewTimer(enemySpawnTime),
 		shootTimer:   types.NewTimer(time.Duration(shootCooldown)),
 		shooter:      shooter,
-		Health:       100,
+		context:      context,
 	}
 }
 
@@ -98,6 +99,8 @@ func (td *TowerDefense) Update() {
 					if td.curTarget != nil && m.ID.String() == td.curTarget.ID.String() {
 						td.curTarget = nil
 					}
+					td.context.AddPoints(m.Points)
+					fmt.Println("Points", td.context.Points)
 				}
 			}
 		}
@@ -105,12 +108,12 @@ func (td *TowerDefense) Update() {
 
 	for i, m := range td.enemies {
 		if m.Collider().Intersects(td.tower.Collider()) {
-			td.Health--
+			td.context.RemoveHealth(1)
 			td.enemies = append(td.enemies[:i], td.enemies[i+1:]...)
 			if td.curTarget != nil && td.curTarget.ID == m.ID {
 				td.curTarget = nil
 			}
-			fmt.Println("Enemy hit tower", td.Health)
+			fmt.Println("Enemy hit tower", td.context.Health)
 		}
 	}
 }
