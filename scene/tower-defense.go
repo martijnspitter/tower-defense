@@ -1,7 +1,6 @@
 package scene
 
 import (
-	"fmt"
 	"math"
 	"time"
 
@@ -100,7 +99,6 @@ func (td *TowerDefense) Update() {
 						td.curTarget = nil
 					}
 					td.context.AddPoints(m.Points)
-					fmt.Println("Points", td.context.Points)
 				}
 			}
 		}
@@ -113,7 +111,6 @@ func (td *TowerDefense) Update() {
 			if td.curTarget != nil && td.curTarget.ID == m.ID {
 				td.curTarget = nil
 			}
-			fmt.Println("Enemy hit tower", td.context.Health)
 		}
 	}
 }
