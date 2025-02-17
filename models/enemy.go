@@ -64,6 +64,10 @@ func (e *Enemy) Hit() {
 	e.Health--
 }
 
+func (e *Enemy) Position() types.Vector {
+	return e.position
+}
+
 func newVectorForEnemy(screenWidth, screenHeight int) types.Vector {
 	// Figure out the middle position — the screen center, in this case
 	middle := types.Vector{

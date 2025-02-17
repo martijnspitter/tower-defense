@@ -2,6 +2,7 @@ package scene
 
 import (
 	"fmt"
+	"math"
 	"time"
 
 	"github.com/martijnspitter/tower-defense/models"
@@ -58,7 +59,8 @@ func (td *TowerDefense) Update() {
 		td.shootTimer.Reset()
 
 		if len(td.enemies) > 0 {
-			td.shooter.AddBullet(td.enemies[0])
+			closestEnemy := td.GetClosestEnemy(td.tower.Position())
+			td.shooter.AddBullet(closestEnemy)
 		}
 	}
 
@@ -102,4 +104,23 @@ func (td *TowerDefense) Draw(screen *ebiten.Image) {
 
 func (td *TowerDefense) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
 	return outsideWidth, outsideHeight
+}
+
+func (td *TowerDefense) GetClosestEnemy(towerPos types.Vector) *models.Enemy {
+	if len(td.enemies) == 0 {
+		return nil
+	}
+
+	var closestEnemy *models.Enemy
+	minDistance := math.MaxFloat64
+
+	for _, enemy := range td.enemies {
+		distance := towerPos.DistanceTo(enemy.Position())
+		if distance < minDistance {
+			minDistance = distance
+			closestEnemy = enemy
+		}
+	}
+
+	return closestEnemy
 }

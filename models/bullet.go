@@ -51,13 +51,11 @@ func (b *Bullet) Draw(screen *ebiten.Image) {
 }
 
 func (b *Bullet) Collider() types.Rect {
-	bounds := b.asset.Bounds()
-
 	return types.NewRect(
 		b.position.X,
 		b.position.Y,
-		float64(bounds.Dx()),
-		float64(bounds.Dy()),
+		5,
+		5,
 	)
 }
 

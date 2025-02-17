@@ -66,3 +66,7 @@ func (p *Tower) Collider() types.Rect {
 		float64(bounds.Dy()),
 	)
 }
+
+func (p *Tower) Position() types.Vector {
+	return p.position
+}
