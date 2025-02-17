@@ -17,14 +17,14 @@ func NewBullet(target *Enemy, screenWidth, screenHeight int) *Bullet {
 	asset := assets.MustLoadImage("bullets/bullet.png")
 
 	pos := newVectorForBullet(screenWidth, screenHeight)
-	movement := newMovementForBullet(pos, target)
 
 	b := &Bullet{
 		target:   target,
 		position: pos,
 		asset:    asset,
-		movement: movement,
 	}
+
+	b.movement = b.newMovementForBullet(pos, target)
 
 	return b
 }
@@ -77,13 +77,23 @@ func newVectorForBullet(screenWidth, screenHeight int) types.Vector {
 	}
 }
 
-func newMovementForBullet(pos types.Vector, target *Enemy) types.Vector {
+func (b *Bullet) newMovementForBullet(pos types.Vector, target *Enemy) types.Vector {
 	velocity := float64(3)
+	bounds := target.asset.Bounds()
 
-	// Direction is the target minus the current position
+	// Enemy center offset (considering 0.5 scale)
+	enemyHalfW := float64(bounds.Dx()) * 0.5 / 2
+	enemyHalfH := float64(bounds.Dy()) * 0.5 / 2
+
+	// Bullet dimensions (considering 0.2 scale)
+	bulletBounds := b.asset.Bounds()
+	bulletHalfW := float64(bulletBounds.Dx()) * 0.2 / 2
+	bulletHalfH := float64(bulletBounds.Dy()) * 0.2 / 2
+
+	// Direction from bullet center to enemy center
 	direction := types.Vector{
-		X: target.Position().X - pos.X,
-		Y: target.Position().Y - pos.Y,
+		X: (target.Position().X + enemyHalfW) - (pos.X + bulletHalfW),
+		Y: (target.Position().Y + enemyHalfH) - (pos.Y + bulletHalfH),
 	}
 
 	normalizedDirection := direction.Normalize()
