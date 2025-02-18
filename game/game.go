@@ -36,7 +36,7 @@ func (g *Game) Update() error {
 		if ebiten.TPS() == 0 {
 			ebiten.SetTPS(60)
 		} else {
-			ebiten.TPS(0)
+			ebiten.SetTPS(0)
 		}
 	}
 	g.scene.Update()
