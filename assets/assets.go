@@ -7,11 +7,14 @@ import (
 	"io/fs"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"golang.org/x/image/font"
+	"golang.org/x/image/font/opentype"
 )
 
 var (
 	//go:embed *
-	assets embed.FS
+	assets     embed.FS
+	PointsFont = MustLoadFont("fonts/font.ttf")
 )
 
 func MustLoadImage(name string) *ebiten.Image {
@@ -41,4 +44,27 @@ func MustLoadImages(path string) []*ebiten.Image {
 	}
 
 	return images
+}
+
+func MustLoadFont(name string) font.Face {
+	f, err := assets.ReadFile(name)
+	if err != nil {
+		panic(err)
+	}
+
+	tt, err := opentype.Parse(f)
+	if err != nil {
+		panic(err)
+	}
+
+	face, err := opentype.NewFace(tt, &opentype.FaceOptions{
+		Size:    48,
+		DPI:     72,
+		Hinting: font.HintingVertical,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	return face
 }
