@@ -5,6 +5,7 @@ import (
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/hajimehoshi/ebiten/v2/text"
 	"github.com/martijnspitter/tower-defense/assets"
 	"github.com/martijnspitter/tower-defense/context"
@@ -32,14 +33,12 @@ func NewGame(screenWidth, screenHeight int) *Game {
 }
 
 func (g *Game) Update() error {
-	if ebiten.IsKeyPressed(ebiten.KeyEscape) {
-		if ebiten.TPS() == 0 {
-			ebiten.SetTPS(60)
-		} else {
-			ebiten.SetTPS(0)
-		}
+	if inpututil.IsKeyJustPressed(ebiten.KeyEscape) {
+		g.context.TooglePauseGame()
 	}
-	g.scene.Update()
+	if !g.context.Paused {
+		g.scene.Update()
+	}
 
 	if g.context.Health == 0 {
 		g.context.ResetHealth()

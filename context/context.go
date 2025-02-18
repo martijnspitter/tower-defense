@@ -1,8 +1,11 @@
 package context
 
+import "fmt"
+
 type Context struct {
 	Points int
 	Health int
+	Paused bool
 }
 
 func NewContext() *Context {
@@ -25,4 +28,8 @@ func (c *Context) RemoveHealth(hit int) {
 
 func (c *Context) ResetHealth() {
 	c.Health = 100
+}
+
+func (c *Context) TooglePauseGame() {
+	c.Paused = !c.Paused
 }
